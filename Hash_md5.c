@@ -13,10 +13,7 @@ void calculate_md5(char *path);
 
 int main(int argc, char const *argv[])
 {
-	DIR *dp;
-	struct dirent * dirp;
-	struct stat buf;
-	char path[255];
+	char path[255] = {0};
 
 	//check path and default path "."
 	if (argc == 1)
@@ -69,12 +66,9 @@ void show_md5(char *path)
 			strcat(filepath, "/");
 			strcat(filepath, dirp->d_name);
 			//printf("filePath: %s\n", filepath);
-			if(checkpath(filepath) == 1)
-				calculate_md5(filepath);
-			else
-				show_md5(filepath);
+			show_md5(filepath);
 		}
-		close(dp);
+		closedir(dp);
 	}
 }
 
@@ -95,7 +89,7 @@ void calculate_md5(char *path)
 	MD5_CTX md5;
 	MD5Init(&md5);
 	
-	unsigned char decrypt[16];
+	unsigned char md5value[16];
 	unsigned char data[READ_DATA_LEN];
 
 	while(1)
@@ -111,11 +105,11 @@ void calculate_md5(char *path)
 		if (filelen < READ_DATA_LEN)
 			break;
 	}
-	MD5Final(&md5,decrypt);
+	MD5Final(&md5,md5value);
 
 	for(i=0;i<16;i++)
 	{
-		printf("%02x",decrypt[i]);
+		printf("%02x",md5value[i]);
 	}
 	printf("\t%s\n", path);
 
