@@ -7,7 +7,7 @@
 #include <fcntl.h>
 
 
-#define BUFF_SIZE 1024
+#define BUFF_SIZE 4096
 
 static void aes_enc(int in, int out, const char *key);
 static void aes_dec(int in, int out, const char *key);
