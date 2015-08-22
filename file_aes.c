@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <openssl/aes.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <string.h>
 #include <stdlib.h>
 #include <error.h>
@@ -57,9 +59,15 @@ int main(int argc, char *argv[])
 	perror("open");
 	exit(1);
     }
+
     struct stat st;
     if(fstat(in, &st) == -1)
 	perror("stat");
+    if(!S_ISREG(st.st_mode))
+    {
+	fprintf(stderr, "Please input a file name\n");
+	exit(1);
+    }
     //int mode = st.st_mode & 0777;
     if((out = open(out_filename, O_CREAT | O_RDWR | O_APPEND, st.st_mode)) == -1)
     {
